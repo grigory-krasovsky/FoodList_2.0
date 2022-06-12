@@ -15,6 +15,9 @@
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>17</java.version>
+        <liquibase.version>4.6.2</liquibase.version>
+        <profile.propertyFile>src/main/resources/db/changelog/liquibase.properties</profile.propertyFile>
+        <profile.changeLogFile>src/main/resources/db/changelog/changelog-master.xml</profile.changeLogFile>
     </properties>
     <dependencies>
         <dependency>
