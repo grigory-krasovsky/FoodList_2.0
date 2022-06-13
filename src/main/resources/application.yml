@@ -1,3 +1,7 @@
 spring:
   liquibase:
     change-log: classpath:/db/changelog-profiles/changelog-master.xml
+  datasource:
+    url: jdbc:postgresql://localhost:40703/compose-postgres
+    username: compose-postgres
+    password: compose-postgres
