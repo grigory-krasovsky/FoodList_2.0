@@ -1,0 +1,11 @@
+[
+  {
+    "database": "postgres",
+    "index": "ingredient",
+    "nodes": {
+      "table": "ingredient",
+      "schema": "public",
+      "columns": ["name", "id"]
+    }
+  }
+]
