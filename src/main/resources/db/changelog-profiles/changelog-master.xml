@@ -6,11 +6,8 @@
     <include file="13.07.2022.add-user.sql" relativeToChangelogFile="true"/>
     <include file="13.07.2022.add-user_and_admin_info.sql" relativeToChangelogFile="true"/>
     <include file="13.07.2022.ingredients-table.sql" relativeToChangelogFile="true"/>
-    <include file="13.07.2022.ingredients-table-delete-id.sql" relativeToChangelogFile="true"/>
-    <include file="13.07.2022.ingredients-table-delete-id-add_pk_constraint.sql" relativeToChangelogFile="true"/>
-    <include file="13.07.2022.course-and-recipe-tables.sql" relativeToChangelogFile="true"/>
-    <include file="13.07.2022.course-and-recipe-tables-alter.sql" relativeToChangelogFile="true"/>
-    <include file="13.07.2022.create-table-course_ingredient-and-course_recipe.sql" relativeToChangelogFile="true"/>
+    <include file="15.07.2022.recipes-table.sql" relativeToChangelogFile="true"/>
+    <include file="15.07.2022.courses-table.sql" relativeToChangelogFile="true"/>
 
 
 
