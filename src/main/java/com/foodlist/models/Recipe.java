@@ -12,8 +12,8 @@ import java.util.UUID;
 @Table(name = "recipe", schema = "public")
 public class Recipe {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Integer id;
 
     UUID uuid;
 

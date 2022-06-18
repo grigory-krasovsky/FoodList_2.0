@@ -8,17 +8,18 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "ingredient", schema = "public", uniqueConstraints = {@UniqueConstraint(columnNames = {"name"})})
+@Table(name = "ingredient", schema = "public")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Ingredient {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id;
+    @Column(name = "uuid")
     private UUID uuid;
-
+    @Column(name = "name")
     private String name;
 
     public Ingredient(UUID uuid, String name) {

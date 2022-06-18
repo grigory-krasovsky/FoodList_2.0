@@ -29,34 +29,29 @@ import java.util.stream.Stream;
 public class DbFromSiteService {
 
     private final IngredientRepository ingredientRepository;
+    private final CourseRepository courseRepository;
 
+    /**
+     * Add courses from https://www.gastronom.ru to db.
+     * @param firstPage - the first page where we get courses from
+     * @param latestPage - the last page where we get courses from
+     */
     public void addCoursesToDb(Integer firstPage, Integer latestPage) {
         List<List<String>> listOfPagesWithRecipeUrls = getRecipesUrls(firstPage, latestPage);
         List<String> recipeUrls = listOfPagesWithRecipeUrls.stream().flatMap(Collection::stream).collect(Collectors.toList());
         List<ParsedRecipe> parsedRecipes = recipeUrls.stream().map(this::parseRecipeUrl).collect(Collectors.toList());
-
-        List<Ingredient> ingredients = new ArrayList<>();
-        List<Recipe> recipes = new ArrayList<>();
         List<Course> courses = new ArrayList<>();
 
         for (ParsedRecipe parsedRecipe : parsedRecipes) {
-            ingredients.addAll(parsedRecipe.ingredients);
-            Recipe recipe = new Recipe(UUID.randomUUID(), parsedRecipe.recipeText);
-            recipes.add(recipe);
-            courses.add(new Course(UUID.randomUUID(), parsedRecipe.recipeTitle(), parsedRecipe.ingredients, recipe));
+            Recipe recipe = new Recipe(null, UUID.randomUUID(), parsedRecipe.recipeText);
+            courses.add(new Course(null, UUID.randomUUID(), parsedRecipe.recipeTitle(), parsedRecipe.ingredients, recipe));
         }
+        //Todo make course.name unique
+        courseRepository.saveAll(resolveDuplicateCourses(courses));
 
-        resolveDuplicateIngredients(ingredients);
         System.out.println("finish");
-
     }
 
-    /**
-     * Get urls to recipes which will be subsequently retrieved and put to db
-     * @param firstPage the page where the recipes start collecting from
-     * @param latestPage the page where the recipes end collecting
-     * @return
-     */
     private List<List<String>> getRecipesUrls(Integer firstPage, Integer latestPage) {
         List<List<String>> result = new ArrayList<>();
         String url = "https://www.gastronom.ru/search/type/recipe/?t=&veget=14&page=";
@@ -77,7 +72,7 @@ public class DbFromSiteService {
         } catch (IOException ioException) {
             ioException.printStackTrace();
             log.info("Unable to connect: " + ioException.getMessage());
-            return null;
+            throw null;
         }
     }
 
@@ -99,28 +94,26 @@ public class DbFromSiteService {
         return new ParsedRecipe(
                 UUID.randomUUID(),
                 title.size() == 1 ? title.get(0).text() : null,
-                ingredients.stream().map(x -> new Ingredient(UUID.randomUUID(), x.text())).collect(Collectors.toList()),
+                ingredients.stream().map(x -> new Ingredient(null, UUID.randomUUID(), x.text())).collect(Collectors.toList()),
                 recipe.toString());
     }
 
     private record ParsedRecipe(UUID id, String recipeTitle, List<Ingredient> ingredients, String recipeText){
-
     }
 
     /**
      * Filter ingredient list to remove all duplicates
-     * @param ingredients
+     * @param courses
      * @return
      */
     //Todo probably need to generify it to make it work with all entities that have names
-    private List<Ingredient> resolveDuplicateIngredients(List<Ingredient> ingredients){
+    private List<Course> resolveDuplicateCourses(List<Course> courses){
 
-        List<Ingredient> existingIngredients = ingredientRepository.findAll();
-        Set<String> seenIngredients = existingIngredients.stream().map(Ingredient::getName).collect(Collectors.toSet());
+        List<Course> existingCourses = courseRepository.findAll();
+        Set<String> seenIngredients = existingCourses.stream().map(Course::getName).collect(Collectors.toSet());
 
-        ingredients.removeIf(ingredient -> !seenIngredients.add(ingredient.getName()));
+        courses.removeIf(ingredient -> !seenIngredients.add(ingredient.getName()));
 
-        return ingredients;
-
+        return courses;
     }
 }

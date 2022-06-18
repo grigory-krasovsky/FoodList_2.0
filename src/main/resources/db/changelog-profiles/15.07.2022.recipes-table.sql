@@ -2,11 +2,11 @@
 
 --changeset gkrasovskiy:15.07.2022.recipes-table.sql
 
-CREATE SEQUENCE IF NOT EXISTS recipe_id_pk_seq ;
+CREATE SEQUENCE IF NOT EXISTS recipe_id_pk_seq;
 CREATE TABLE IF NOT EXISTS recipe
 (
-    id INT DEFAULT nextval('recipe_id_pk_seq')
+    id          INT DEFAULT nextval('recipe_id_pk_seq')
         CONSTRAINT pk_recipe_id PRIMARY KEY,
-    uuid UUID NOT NULL,
-    recipe_text VARCHAR (250) NOT NULL
+    uuid        UUID          NOT NULL,
+    recipe_text VARCHAR(5000) NOT NULL
 );
