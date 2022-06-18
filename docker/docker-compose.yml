@@ -5,7 +5,7 @@ services:
     image: 'docker-spring-boot-postgres:latest'
     build:
       context: ../
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/AppDockerfile
     container_name: app
     depends_on:
       - db
@@ -27,7 +27,10 @@ services:
       - POSTGRES_PASSWORD=postgres
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+#    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+    build:
+      context: ../
+      dockerfile: docker/ESDockerfile
     container_name: elasticsearch
     environment:
       - xpack.security.enabled=false
@@ -42,7 +45,7 @@ services:
       - '9200:9200'
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.13.4
+    image: docker.elastic.co/kibana/kibana:7.17.4
     depends_on:
       - elasticsearch
     ports:

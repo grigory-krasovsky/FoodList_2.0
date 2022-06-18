@@ -6,7 +6,6 @@ import com.foodlist.models.Recipe;
 import com.foodlist.repositories.CourseRepository;
 import com.foodlist.repositories.IngredientRepository;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -43,11 +42,14 @@ public class DbFromSiteService {
         List<Course> courses = new ArrayList<>();
 
         for (ParsedRecipe parsedRecipe : parsedRecipes) {
-            Recipe recipe = new Recipe(null, UUID.randomUUID(), parsedRecipe.recipeText);
-            courses.add(new Course(null, UUID.randomUUID(), parsedRecipe.recipeTitle(), parsedRecipe.ingredients, recipe));
+            if(courseRepository.findByName(parsedRecipe.recipeTitle()).isEmpty()){
+                Recipe recipe = new Recipe(null, UUID.randomUUID(), parsedRecipe.recipeText);
+                List<Ingredient> ingredients = getIngredientListAccordingToExistingIngredients(parsedRecipe.ingredients);
+                courses.add(new Course(null, UUID.randomUUID(), parsedRecipe.recipeTitle(), ingredients, recipe));
+            }
         }
         //Todo make course.name unique
-        courseRepository.saveAll(resolveDuplicateCourses(courses));
+        courseRepository.saveAll(courses);
 
         System.out.println("finish");
     }
@@ -87,33 +89,34 @@ public class DbFromSiteService {
     private ParsedRecipe parseRecipeUrl(String url) {
         Document doc = getDocument(url);
         List<Element> title = parseUrl(doc, "recipe__title", null).collect(Collectors.toList());
-        List<Element> ingredients = parseUrl(doc, "recipe__ingredient", null).collect(Collectors.toList());
+        List<String> ingredients = parseUrl(doc, "recipe__ingredient", null)
+                .map(Element::text).collect(Collectors.toList());
         List<Element> recipeTextInArray = parseUrl(doc, "recipe__step-text", null).collect(Collectors.toList());
         StringJoiner recipe = new StringJoiner(" ");
         recipeTextInArray.forEach(i -> recipe.add(i.text()));
         return new ParsedRecipe(
                 UUID.randomUUID(),
                 title.size() == 1 ? title.get(0).text() : null,
-                ingredients.stream().map(x -> new Ingredient(null, UUID.randomUUID(), x.text())).collect(Collectors.toList()),
+                ingredients,
                 recipe.toString());
     }
 
-    private record ParsedRecipe(UUID id, String recipeTitle, List<Ingredient> ingredients, String recipeText){
+    private record ParsedRecipe(UUID id, String recipeTitle, List<String> ingredients, String recipeText){
     }
 
-    /**
-     * Filter ingredient list to remove all duplicates
-     * @param courses
-     * @return
-     */
-    //Todo probably need to generify it to make it work with all entities that have names
-    private List<Course> resolveDuplicateCourses(List<Course> courses){
+    private List<Ingredient> getIngredientListAccordingToExistingIngredients(List<String> ingredients){
+        //get map of ingredient name and ingredients from db
+        Map<String, Ingredient> ingredientsFromDb = ingredientRepository
+                .findByNameIn(ingredients)
+                .stream().collect(Collectors.toMap(Ingredient::getName, value -> value));
 
-        List<Course> existingCourses = courseRepository.findAll();
-        Set<String> seenIngredients = existingCourses.stream().map(Course::getName).collect(Collectors.toSet());
-
-        courses.removeIf(ingredient -> !seenIngredients.add(ingredient.getName()));
-
-        return courses;
+        //put new ingredients into the map of existing ingredients
+        for(String ingredientName : ingredients) {
+            if(!ingredientsFromDb.containsKey(ingredientName)) {
+                ingredientsFromDb.put(ingredientName,
+                        new Ingredient(null, UUID.randomUUID(), ingredientName));
+            }
+        }
+        return new ArrayList<>(ingredientsFromDb.values());
     }
 }

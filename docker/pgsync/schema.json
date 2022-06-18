@@ -5,7 +5,7 @@
     "nodes": {
       "table": "ingredient",
       "schema": "public",
-      "columns": ["name", "id"]
+      "columns": ["name", "id", "uuid"]
     }
   }
 ]
