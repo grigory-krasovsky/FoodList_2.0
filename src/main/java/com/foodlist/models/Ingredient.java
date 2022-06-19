@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -15,11 +16,8 @@ import java.util.UUID;
 public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Integer id;
-    @Column(name = "uuid")
     private UUID uuid;
-    @Column(name = "name")
     private String name;
 
     public Ingredient(UUID uuid, String name) {

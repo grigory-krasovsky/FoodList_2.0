@@ -17,9 +17,7 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-
     UUID uuid;
-
     String name;
 
     @ManyToMany(cascade = CascadeType.PERSIST)

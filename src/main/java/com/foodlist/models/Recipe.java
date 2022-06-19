@@ -14,9 +14,7 @@ public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-
     UUID uuid;
-
     @Column(name = "recipe_text")
     String recipeText;
 
