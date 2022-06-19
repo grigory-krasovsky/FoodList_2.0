@@ -17,15 +17,24 @@ public class CourseService {
     IngredientRepository ingredientRepository;
 
     /**
-     * Filter courses by the list of required ingredients: the course must have all specified ingredients
+     * Filter courses by the list of required ingredient names: the course must have all specified ingredients
      * @param ingredientNames
      * @return
      */
-    public List<Course> getCoursesByIngredientNames(List<String> ingredientNames){
+    public List<Course> getCoursesWithSpecificIngredients(List<String> ingredientNames) {
         List<Course> withAtLeastOneIngredient = courseRepository.findByIngredients_NameIn(ingredientNames);
-        List<Course> filteredCourses = withAtLeastOneIngredient.stream().filter(course -> course.getIngredients()
+        return withAtLeastOneIngredient.stream().filter(course -> course.getIngredients()
                 .stream().map(Ingredient::getName).collect(Collectors.toList())
                 .containsAll(ingredientNames)).collect(Collectors.toList());
-        return filteredCourses;
+    }
+
+    /**
+     * Filter courses by the list of required ingredient names: the course must not have any of specified ingredients
+     * @param ingredientNames
+     * @return
+     */
+    public List<Course> getCoursesWithoutSpecificIngredients(List<String> ingredientNames) {
+        List<Ingredient> ingredients = ingredientRepository.findByNameIn(ingredientNames);
+        return courseRepository.findByIngredientsNotIn(ingredients);
     }
 }

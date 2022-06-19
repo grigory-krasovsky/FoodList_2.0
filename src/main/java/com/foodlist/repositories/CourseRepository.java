@@ -13,4 +13,6 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
     Optional<Course> findByName(String name);
 
     List<Course> findByIngredients_NameIn(List<String> ingredientNames);
+
+    List<Course> findByIngredientsNotIn(List<Ingredient> ingredientNames);
 }
