@@ -12,6 +12,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.*;
@@ -35,17 +36,29 @@ public class DbFromSiteService {
      * @param firstPage - the first page where we get courses from
      * @param latestPage - the last page where we get courses from
      */
+    @Transactional
     public void addCoursesToDb(Integer firstPage, Integer latestPage) {
         List<List<String>> listOfPagesWithRecipeUrls = getRecipesUrls(firstPage, latestPage);
         List<String> recipeUrls = listOfPagesWithRecipeUrls.stream().flatMap(Collection::stream).collect(Collectors.toList());
         List<ParsedRecipe> parsedRecipes = recipeUrls.stream().map(this::parseRecipeUrl).collect(Collectors.toList());
         List<Course> courses = new ArrayList<>();
 
+        Set<String> uniqueIngredients = parsedRecipes.stream()
+                .flatMap(i->i.ingredients.stream()).collect(Collectors.toSet());
+
+        Map<String, Ingredient> resolvedIngredients =
+                getIngredientMapAccordingToExistingIngredients(new ArrayList<>(uniqueIngredients));
+        ingredientRepository.saveAll(resolvedIngredients.values());
+
         for (ParsedRecipe parsedRecipe : parsedRecipes) {
             if(courseRepository.findByName(parsedRecipe.recipeTitle()).isEmpty()){
                 Recipe recipe = new Recipe(null, UUID.randomUUID(), parsedRecipe.recipeText);
-                List<Ingredient> ingredients = getIngredientListAccordingToExistingIngredients(parsedRecipe.ingredients);
-                courses.add(new Course(null, UUID.randomUUID(), parsedRecipe.recipeTitle(), ingredients, recipe));
+                List<Ingredient> ingredientsForCurrentCourse = parsedRecipe
+                        .ingredients.stream()
+                        .map(resolvedIngredients::get)
+                        .collect(Collectors.toList());
+
+                courses.add(new Course(null, UUID.randomUUID(), parsedRecipe.recipeTitle(), ingredientsForCurrentCourse, recipe));
             }
         }
         //Todo make course.name unique
@@ -104,7 +117,7 @@ public class DbFromSiteService {
     private record ParsedRecipe(UUID id, String recipeTitle, List<String> ingredients, String recipeText){
     }
 
-    private List<Ingredient> getIngredientListAccordingToExistingIngredients(List<String> ingredients){
+    private Map<String, Ingredient> getIngredientMapAccordingToExistingIngredients(List<String> ingredients){
         //get map of ingredient name and ingredients from db
         Map<String, Ingredient> ingredientsFromDb = ingredientRepository
                 .findByNameIn(ingredients)
@@ -117,6 +130,6 @@ public class DbFromSiteService {
                         new Ingredient(null, UUID.randomUUID(), ingredientName));
             }
         }
-        return new ArrayList<>(ingredientsFromDb.values());
+        return ingredientsFromDb;
     }
 }
