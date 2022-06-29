@@ -35,6 +35,6 @@ public class CourseService {
      */
     public List<Course> getCoursesWithoutSpecificIngredients(List<String> ingredientNames) {
         List<Ingredient> ingredients = ingredientRepository.findByNameIn(ingredientNames);
-        return courseRepository.findByIngredientsNotIn(ingredients);
+        return courseRepository.findByIngredientsExceptionFilter(ingredientNames);
     }
 }
