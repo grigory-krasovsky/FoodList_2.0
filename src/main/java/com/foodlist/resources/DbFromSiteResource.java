@@ -20,6 +20,6 @@ public class DbFromSiteResource {
 
     @GetMapping("/testMethod")
     public void test(){
-        dbFromSiteService.addCoursesToDb(1,2);
+        dbFromSiteService.addCoursesToDb(1,1);
     }
 }

@@ -1,9 +1,6 @@
 spring:
   liquibase:
     change-log: classpath:/db/changelog-profiles/changelog-master.xml
-#  jpa:
-#    hibernate:
-#      ddl-auto: validate
   datasource:
     url: jdbc:postgresql://localhost:40703/postgres
     username: postgres

@@ -53,21 +53,21 @@ services:
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
 
-  redis:
-    image: 'redis:alpine'
-    container_name: redis
-    ports:
-      - '6379:6379'
+#  redis:
+#    image: 'redis:alpine'
+#    container_name: redis
+#    ports:
+#      - '6379:6379'
 
-  pgsync:
-    build:
-      context: .
-      dockerfile: PgsyncDockerfile
-    container_name: pgsync
-    environment:
-      - PG_USER=postgres
-      - PG_PASSWORD=postgres
-      - PG_DATABASE=postgres
-      - PG_HOST=db
-      - ELASTICSEARCH_HOST=elasticsearch
-      - REDIS_HOST=redis
+#  pgsync:
+#    build:
+#      context: .
+#      dockerfile: PgsyncDockerfile
+#    container_name: pgsync
+#    environment:
+#      - PG_USER=postgres
+#      - PG_PASSWORD=postgres
+#      - PG_DATABASE=postgres
+#      - PG_HOST=db
+#      - ELASTICSEARCH_HOST=elasticsearch
+#      - REDIS_HOST=redis
