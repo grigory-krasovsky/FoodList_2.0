@@ -13,7 +13,7 @@ public class DbFromSiteResource {
         this.dbFromSiteService = dbFromSiteService;
     }
 
-    @GetMapping("/test/{firstPage}/{latestPage}")
+    @GetMapping("/test/{firstPage}//{latestPage}")
     public void testController(@PathVariable Integer firstPage, @PathVariable Integer latestPage){
 //        dbFromSiteService.addCoursesToDb(firstPage, latestPage);
     }

@@ -2,11 +2,12 @@ version: '2'
 
 services:
   app:
-    image: 'docker-spring-boot-postgres:latest'
     build:
-      context: ../
-      dockerfile: docker/AppDockerfile
+      context: .
+      dockerfile: AppDockerfile
     container_name: app
+    ports:
+      - '8081:8080'
     depends_on:
       - db
     environment:
@@ -36,7 +37,6 @@ services:
       - xpack.security.enabled=false
       - discovery.type=single-node
       - bootstrap.memory_lock=true
-      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
     ulimits:
       memlock:
         soft: -1
@@ -52,22 +52,3 @@ services:
       - '5601:5601'
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-
-#  redis:
-#    image: 'redis:alpine'
-#    container_name: redis
-#    ports:
-#      - '6379:6379'
-
-#  pgsync:
-#    build:
-#      context: .
-#      dockerfile: PgsyncDockerfile
-#    container_name: pgsync
-#    environment:
-#      - PG_USER=postgres
-#      - PG_PASSWORD=postgres
-#      - PG_DATABASE=postgres
-#      - PG_HOST=db
-#      - ELASTICSEARCH_HOST=elasticsearch
-#      - REDIS_HOST=redis

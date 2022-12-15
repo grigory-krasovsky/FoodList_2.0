@@ -1,8 +1,8 @@
 --liquibase formatted sql
 
 --changeset krasovskiy:13.07.2022.add-user.sql
-CREATE SEQUENCE user_id_pk_seq;
-CREATE TABLE "user"
+CREATE SEQUENCE IF NOT EXISTS user_id_pk_seq;
+CREATE TABLE IF NOT EXISTS "user"
 (
     id        INT DEFAULT nextval('user_id_pk_seq')
         CONSTRAINT pk_user_id PRIMARY KEY,

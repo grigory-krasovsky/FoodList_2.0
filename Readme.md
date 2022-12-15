@@ -1,7 +1,8 @@
-### Delete app container
-docker-compose rm -f app
-### Recreate app container
-docker-compose up --build app
+### Run docker-compose container
+1) build .jar ```package -DskipTests```
+2) copy .jar file to docker dir
+3) docker-compose build app
+4) ```docker-compose -p food-list up```
 
 ### ES
 create ingredient index:
@@ -45,4 +46,11 @@ Content-Type: application/json
       }
     }
   }
-}```
+}
+```
+### Postgres
+#### Dump
+1) in container: `pg_dump -U postgres -E UTF-8 -f dump.sql`
+2) copy db container id
+3) docker cp containerId:/dump.sql /local/machine/path
+4) 
