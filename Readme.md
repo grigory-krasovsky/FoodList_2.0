@@ -7,7 +7,8 @@
 ### ES
 create ingredient index:
 
-```PUT http://localhost:9200/ingredient
+```
+PUT http://localhost:9200/ingredient
 Content-Type: application/json
 
 {
