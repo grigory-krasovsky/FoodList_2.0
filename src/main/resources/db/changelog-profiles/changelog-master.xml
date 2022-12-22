@@ -8,6 +8,7 @@
     <include file="13.07.2022.ingredients-table.sql" relativeToChangelogFile="true"/>
     <include file="15.07.2022.recipes-table.sql" relativeToChangelogFile="true"/>
     <include file="15.07.2022.courses-table.sql" relativeToChangelogFile="true"/>
+    <include file="22.12.2022.add-timestamp-to-ingredient.sql" relativeToChangelogFile="true"/>
 
 
 

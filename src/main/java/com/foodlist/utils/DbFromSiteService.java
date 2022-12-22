@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -127,7 +129,7 @@ public class DbFromSiteService {
         for(String ingredientName : ingredients) {
             if(!ingredientsFromDb.containsKey(ingredientName)) {
                 ingredientsFromDb.put(ingredientName,
-                        new Ingredient(null, UUID.randomUUID(), ingredientName));
+                        new Ingredient(null, UUID.randomUUID(), ingredientName, Timestamp.valueOf(LocalDateTime.now())));
             }
         }
         return ingredientsFromDb;

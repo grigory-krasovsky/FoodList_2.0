@@ -501,7 +501,7 @@ COPY public.course_ingredient (course_id, ingredient_id) FROM stdin;
 --
 
 COPY public.databasechangelog (id, author, filename, dateexecuted, orderexecuted, exectype, md5sum, description, comments, tag, liquibase, contexts, labels, deployment_id) FROM stdin;
-13.07.2022.add-user.sql	krasovskiy	db/changelog-profiles/13.07.2022.add-user.sql	2022-12-15 08:40:20.033295	1	EXECUTED	8:61b3581d00b1088e43274b594b890cc4	sql		\N	4.6.2	\N	\N	1093619971
+13.07.2022.add-user.sql	krasovskiy	db/changelog-profiles/13.07.2022.add-user.sql	2022-12-15 08:40:20.033295	1	EXECUTED	8:044be9318083d2f13f198ad9a4ba9f90	sql		\N	4.6.2	\N	\N	1093619971
 13.07.2022.add-user_and_admin_info.sql	krasovskiy	db/changelog-profiles/13.07.2022.add-user_and_admin_info.sql	2022-12-15 08:40:20.065447	2	EXECUTED	8:7becd6834f6da450b2b848fef6051a51	sql		\N	4.6.2	\N	\N	1093619971
 13.07.2022.ingredients-table.sql	gkrasovskiy	db/changelog-profiles/13.07.2022.ingredients-table.sql	2022-12-15 08:40:20.075503	3	EXECUTED	8:abafcded6697fdb405caca2436e21a8a	sql		\N	4.6.2	\N	\N	1093619971
 15.07.2022.recipes-table.sql	gkrasovskiy	db/changelog-profiles/15.07.2022.recipes-table.sql	2022-12-15 08:40:20.086743	4	EXECUTED	8:3d3a3aa18bf0ea9f2bd2405a1f5a8be4	sql		\N	4.6.2	\N	\N	1093619971

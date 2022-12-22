@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Entity
@@ -19,9 +19,11 @@ public class Ingredient {
     private Integer id;
     private UUID uuid;
     private String name;
+    private Timestamp updated_at;
 
-    public Ingredient(UUID uuid, String name) {
+    public Ingredient(UUID uuid, String name, Timestamp updated_at) {
         this.uuid = uuid;
         this.name = name;
+        this.updated_at = updated_at;
     }
 }
