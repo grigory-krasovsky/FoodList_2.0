@@ -15,9 +15,4 @@ public class SecurityTestResource {
     public String admin (){
         return ("admin");
     }
-
-    @GetMapping("/")
-    public String home (){
-        return ("home");
-    }
 }

@@ -3,11 +3,11 @@ name: food-list
 services:
   app:
     build:
-      context: .
+      context: ./mainApp
       dockerfile: AppDockerfile
     container_name: app
     ports:
-      - '8081:8080'
+      - '8761:8761'
     depends_on:
       - db
     environment:
@@ -15,22 +15,21 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-
   db:
     build:
-      context: .
+      context: ./postgres
       dockerfile: PostgresDockerfile
     container_name: db
     ports:
-      - '40703:5432'
+      - '5432:5432'
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
   elasticsearch:
     build:
-      context: ../
-      dockerfile: docker/ESDockerfile
+      context: ./elastic
+      dockerfile: ESDockerfile
     container_name: elasticsearch
     environment:
       - xpack.security.enabled=false

@@ -41,8 +41,8 @@ public class DbFromSiteService {
     @Transactional
     public void addCoursesToDb(Integer firstPage, Integer latestPage) {
         List<List<String>> listOfPagesWithRecipeUrls = getRecipesUrls(firstPage, latestPage);
-        List<String> recipeUrls = listOfPagesWithRecipeUrls.stream().flatMap(Collection::stream).collect(Collectors.toList());
-        List<ParsedRecipe> parsedRecipes = recipeUrls.stream().map(this::parseRecipeUrl).collect(Collectors.toList());
+        List<String> recipeUrls = listOfPagesWithRecipeUrls.stream().flatMap(Collection::stream).toList();
+        List<ParsedRecipe> parsedRecipes = recipeUrls.stream().map(this::parseRecipeUrl).toList();
         List<Course> courses = new ArrayList<>();
 
         Set<String> uniqueIngredients = parsedRecipes.stream()
@@ -89,7 +89,7 @@ public class DbFromSiteService {
         } catch (IOException ioException) {
             ioException.printStackTrace();
             log.info("Unable to connect: " + ioException.getMessage());
-            throw null;
+            throw new RuntimeException();
         }
     }
 
@@ -103,10 +103,10 @@ public class DbFromSiteService {
 
     private ParsedRecipe parseRecipeUrl(String url) {
         Document doc = getDocument(url);
-        List<Element> title = parseUrl(doc, "recipe__title", null).collect(Collectors.toList());
+        List<Element> title = parseUrl(doc, "recipe__title", null).toList();
         List<String> ingredients = parseUrl(doc, "recipe__ingredient", null)
                 .map(Element::text).collect(Collectors.toList());
-        List<Element> recipeTextInArray = parseUrl(doc, "recipe__step-text", null).collect(Collectors.toList());
+        List<Element> recipeTextInArray = parseUrl(doc, "recipe__step-text", null).toList();
         StringJoiner recipe = new StringJoiner(" ");
         recipeTextInArray.forEach(i -> recipe.add(i.text()));
         return new ParsedRecipe(
