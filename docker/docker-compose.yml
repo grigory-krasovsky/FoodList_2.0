@@ -15,6 +15,16 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+  elastic-app:
+    build:
+      context: ./elasticApp
+      dockerfile: AppDockerfile
+    container_name: elastic-app
+    ports:
+      - '8081:8081'
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
   db:
     build:
       context: ./postgres
@@ -25,11 +35,16 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-
   elasticsearch:
     build:
       context: ./elastic
       dockerfile: ESDockerfile
+    healthcheck:
+      test: [ "CMD", "curl", "-XGET", "http://elasticsearch:9200/_cat/health" ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
     container_name: elasticsearch
     environment:
       - xpack.security.enabled=false
@@ -58,5 +73,4 @@ services:
       - ./logstash/pipeline.conf:/usr/share/logstash/pipeline/pipeline.conf:ro
       - ./logstash/postgresql-42.5.1.jar:/usr/share/logstash/postgresql-42.5.1.jar
     depends_on:
-      - elasticsearch
-      - db
+      - elastic-app
