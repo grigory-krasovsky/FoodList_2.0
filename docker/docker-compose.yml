@@ -74,3 +74,11 @@ services:
       - ./logstash/postgresql-42.5.1.jar:/usr/share/logstash/postgresql-42.5.1.jar
     depends_on:
       - elastic-app
+  keycloak:
+    image: quay.io/keycloak/keycloak:20.0.5
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    ports:
+      - "18080:8080"
+    command: ['start-dev']

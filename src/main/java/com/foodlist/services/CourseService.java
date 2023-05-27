@@ -37,4 +37,8 @@ public class CourseService {
         List<Ingredient> ingredients = ingredientRepository.findByNameIn(ingredientNames);
         return courseRepository.findByIngredientsExceptionFilter(ingredientNames);
     }
+
+    public List<Course> getAll() {
+        return courseRepository.findAll();
+    }
 }
