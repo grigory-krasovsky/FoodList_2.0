@@ -1,5 +1,6 @@
-package com.foodlist.models;
+package com.foodlist.models.db;
 
+import com.foodlist.models.dto.CourseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "course", schema = "public")
@@ -36,5 +38,11 @@ public class Course {
         this.name = name;
         this.ingredients = ingredients;
         this.recipe = recipe;
+    }
+
+    public CourseDTO toDto() {
+        return new CourseDTO(this.getName(), this.getUuid().toString(),
+                this.getIngredients().stream().map(Ingredient::getName).collect(Collectors.toList()),
+                this.getRecipe().getRecipeText());
     }
 }

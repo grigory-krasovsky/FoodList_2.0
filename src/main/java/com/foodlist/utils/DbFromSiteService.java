@@ -1,8 +1,8 @@
 package com.foodlist.utils;
 
-import com.foodlist.models.Course;
-import com.foodlist.models.Ingredient;
-import com.foodlist.models.Recipe;
+import com.foodlist.models.db.Course;
+import com.foodlist.models.db.Ingredient;
+import com.foodlist.models.db.Recipe;
 import com.foodlist.repositories.CourseRepository;
 import com.foodlist.repositories.IngredientRepository;
 import lombok.AllArgsConstructor;

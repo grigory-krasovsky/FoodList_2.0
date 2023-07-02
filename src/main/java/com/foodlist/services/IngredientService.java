@@ -1,6 +1,6 @@
 package com.foodlist.services;
 
-import com.foodlist.models.Ingredient;
+import com.foodlist.models.db.Ingredient;
 import com.foodlist.repositories.IngredientRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

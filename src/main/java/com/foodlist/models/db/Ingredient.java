@@ -1,4 +1,4 @@
-package com.foodlist.models;
+package com.foodlist.models.db;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

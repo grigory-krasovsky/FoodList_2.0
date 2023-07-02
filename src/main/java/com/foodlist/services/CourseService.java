@@ -1,12 +1,13 @@
 package com.foodlist.services;
 
-import com.foodlist.models.Course;
-import com.foodlist.models.Ingredient;
+import com.foodlist.models.db.Course;
+import com.foodlist.models.db.Ingredient;
 import com.foodlist.repositories.CourseRepository;
 import com.foodlist.repositories.IngredientRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,8 +24,8 @@ public class CourseService {
      */
     public List<Course> getCoursesWithSpecificIngredients(List<String> ingredientNames) {
         List<Course> withAtLeastOneIngredient = courseRepository.findByIngredients_NameIn(ingredientNames);
-        return withAtLeastOneIngredient.stream().filter(course -> course.getIngredients()
-                .stream().map(Ingredient::getName).collect(Collectors.toList())
+        return withAtLeastOneIngredient.stream().filter(course -> new HashSet<>(course.getIngredients()
+                .stream().map(Ingredient::getName).toList())
                 .containsAll(ingredientNames)).collect(Collectors.toList());
     }
 
@@ -39,6 +40,7 @@ public class CourseService {
     }
 
     public List<Course> getAll() {
-        return courseRepository.findAll();
+        List<Course> all = courseRepository.findAll();
+        return all;
     }
 }
